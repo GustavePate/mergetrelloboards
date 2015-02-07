@@ -7,7 +7,7 @@ Trello utilities
 
 ## Requirements
 
-trello2txt use standard libray python module and the request module
+Theses utilities use standard libray python module and the request module
 
 On debian/ubuntu:
 
@@ -19,7 +19,7 @@ or
 
 ## Installation
 
-    git clone https://github.com/GustavePate/trello2txt
+    git clone https://github.com/GustavePate/mergetrelloboards
 
 
 Trellomerge
@@ -43,7 +43,7 @@ Use crontab to keep your trello boards synchronized.
 
 Run
 
-    vim /path/to/trello2txt/conf.py
+    vim /path/to/mergetrelloboards/conf.py
 
 Change the configuration, you will need:
 - a trello api developper key [here](https://trello.com/docs/).
@@ -52,7 +52,7 @@ Change the configuration, you will need:
 
 ## Usage
 
-    python /path/to/trello2txt/trellomerge.py /path/to/trello2txt/conf.py
+    python /path/to/mergetrelloboards/trellomerge.py /path/to/trello2txt/conf.py
 
 Trello2txt
 ==========
@@ -70,7 +70,7 @@ All I needed was a trello2txt tool. Here it is !
 
 Run
 
-    vim /path/to/trello2txt/conf.py
+    vim /path/to/mergetrelloboards/conf.py
 
 Change the configuration, you will need:
 - a trello api developper key [here](https://trello.com/docs/).
@@ -84,11 +84,11 @@ Adjust the filters to your needs (by default only cards with orange and red labe
 
 Just run:
 
-    python /path/to/trello2txt/trello2txt.py /path/to/trello2txt/conf.py -s
+    python /path/to/mergetrelloboards/trello2txt.py /path/to/trello2txt/conf.py -s
 
 or to create a local file:
 
-    python /path/to/trello2txt/trello2txt.py /path/to/trello2txt/conf.py -s -d /tmp/trello.txt
+    python /path/to/mergetrelloboards/trello2txt.py /path/to/trello2txt/conf.py -s -d /tmp/trello.txt
 
 Enjoy !
 
@@ -103,7 +103,7 @@ Edit it first, you'll have to change the path to the trello2txt.py, conf.py and 
 
 Then:
 
-    conky -d -c /path/to/trello2txt/trelloconkyrc
+    conky -d -c /path/to/mergetrelloboards/trelloconkyrc
 
 Wait up to 10 minutes to ensure the list is updated.
 
@@ -111,5 +111,5 @@ Tada !
 
 A screenshot of my desktop with trello2txt/conky:
 
-![screenshot of conky and trello2txt](https://raw.github.com/GustavePate/trello2txt/master/pics/trello+conky.png "Conky + Trello screenshot")
+![screenshot of conky and trello2txt(https://raw.github.com/GustavePate/mergetrelloboards/master/pics/trello+conky.png "Conky + Trello screenshot")
 
