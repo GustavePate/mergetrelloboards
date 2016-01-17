@@ -21,8 +21,12 @@ class TrelloUtils(object):
             duestr = c['due']
             if duestr is not None and duestr != 'null':
                 duedate = datetime.strptime(duestr, "%Y-%m-%dT%H:%M:%S.%fZ").date()
+                # print "due date: " + duestr
+                # print "due date: " + str(duedate)
                 if duedate < near_futur:
                     # make it red
+                    # print "make it red"
+                    # print str(c)
                     self._dao.setLabel(c, 'red')
 
     def reorderListByPriority(self, listid, labels_order_by_priority_asc):
@@ -47,6 +51,10 @@ class TrelloUtils(object):
         toreorder = [sc for sc in cards if sc['due'] != 'null']
         neworder = sorted(toreorder, key=lambda x: x['due'], reverse=True)
         for c in neworder:
-            print "** ", c['name'].encode('utf-8'), " has a due date ", c['due'].encode('utf-8')
-            self._dao.moveCard(c['id'], 'top')
-            print "** ", c['name'].encode('utf-8'), " moved to top "
+            try:
+                print str(c)
+                print "** ", c['name'].encode('utf-8'), " has a due date ", c['due'].encode('utf-8')
+                self._dao.moveCard(c['id'], 'top')
+                print "** ", c['name'].encode('utf-8'), " moved to top "
+            except Exception as e:
+                print str(e)
