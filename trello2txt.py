@@ -7,8 +7,8 @@ import sys
 # from collections import OrderedDict
 import argparse
 import os
-from dao.trellodao import TrelloBoardDAO
 
+MAX_TXT_LEN = 45
 
 conf = {}
 # A list class containing cards
@@ -113,6 +113,10 @@ def getopencards(listmodel):
         cards = r.json()
 
         for c in cards:
+
+            if len(c[u'name']) > MAX_TXT_LEN:
+                c[u'name'] = c[u'name'][:MAX_TXT_LEN] + "..."
+
             if c[u'labels']:
                 color = c[u'labels'][0][u'color']
             else:
