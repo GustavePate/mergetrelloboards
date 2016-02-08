@@ -46,7 +46,7 @@ Run
     vim /path/to/mergetrelloboards/conf.py
 
 Change the configuration. You will need:
-- a Trello API developer key [here](https://tello.com/docs/).
+- a Trello API developer key [here](https://trello.com/docs/).
 - a Trello API developer token [here](https://trello.com/docs/).
 - your master and slave board id (see the URL in your webbrowser when you're connected to Trello).
 
