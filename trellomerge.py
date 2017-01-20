@@ -13,7 +13,6 @@ from collections import OrderedDict
 from dao.trellodao import TrelloBoardDAO
 from objects.trelloutils import TrelloUtils
 from objects.trelloutils import __
-import ipdb as pdb
 
 conf = {}
 

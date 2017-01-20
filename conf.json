@@ -9,16 +9,16 @@
 */
 
 {
-"appkey" : "64252214ed1b16224ee8742f8db14a6b",
-"secret" : "a2f1255f1bf434bc8a551308ddb26fdd5a2c1a4b520231156cb0ff55aef46fbc",
-"token" : "172df2e4d4004f66525c74a4902212992301b16508ab087fe6f681d14a457f0e",
+"appkey" : "64252214ed1b10024ee8742f8db14a6b",
+"secret" : "a2f1255f1bf434bc8a568308ddb26fdd5a2c1a4b520231156cb0ff55aef46fbc",
+"token" : "172df2e4d4004f66525c74a4945212992301b16508ab087fe6f681d14a457f0e",
 /*
     ########### trello2txt CONFIGURATION ############
 
     Board id (see Trello url)
     CHANGE THIS !!!!!
 */
-"board" : "GKibpt0N",
+"board" : "GKuapt0N",
 
 /* Possible behaviour*/
 "BY_COLOR" : 0,
@@ -50,12 +50,12 @@
 /* # ########### trellomerge CONFIGURATION ############ */
 
 "MERGE" : {
-    "masterboard" : "y79lF0eI",
-    "slaveboard" : "yh8jqfbd",
+    "masterboard" : "uoRr6enk",
+    "slaveboard" : "GUiyaJoB",
     /*
     # prefix to add to cards copied from the master board to the slave board
     */
-    "slavecardsprefix" : "[copy]",
+    "slavecardsprefix" : "[kr]",
     /*# theses slave lists will be sorted by due date and not by priority [default behaviour] */
     "orderbyduedate" : ["Calendar"]
 }

@@ -52,10 +52,10 @@ class TrelloUtils(object):
                 colorpresence = None
                 colorpresence = [label for label in colors if label['color'] == p]
                 if colorpresence != []:
-                    logging.info("** ", sc['name'].encode('utf-8'), " has a label ", p)
+                    logging.info(__("** {} has a label {} ", sc['name'], p))
                     if sc['id'] not in ignorelist:
                         self._dao.moveCard(sc['id'], 'top')
-                        logging.info("** ", sc['name'].encode('utf-8'), " moved to top ", p)
+                        logging.info(__("** {} moved to top ", sc['name']))
                         ignorelist.append(sc['id'])
 
     def reorderListByDueDate(self, listid):
@@ -64,9 +64,8 @@ class TrelloUtils(object):
         neworder = sorted(toreorder, key=lambda x: x['due'], reverse=True)
         for c in neworder:
             try:
-                logging.info(str(c))
-                logging.info("** ", c['name'].encode('utf-8'), " has a due date ", c['due'].encode('utf-8'))
+                logging.info(__("** {} has a due date {}", c['name'],  c['due']))
                 self._dao.moveCard(c['id'], 'top')
-                logging.info("** ", c['name'].encode('utf-8'), " moved to top ")
+                logging.info(__("** {} moved to top ", c['name']))
             except Exception as e:
-                logging.info(str(e))
+                logging.error(e)

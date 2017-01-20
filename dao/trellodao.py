@@ -230,9 +230,8 @@ class TrelloBoardDAO(object):
             raise Exception("getCard:" + str(r.status_code))
         else:
             res = r.json()
-        if verbose:
-            logging.info(url)
-            logging.info(json.dumps(r.json(), sort_keys=True, indent=4))
+        logging.debug(url)
+        logging.debug(json.dumps(r.json(), sort_keys=True, indent=4))
         return res
 
     def setDueDate(self, card, duedate='null', verbose=None):
@@ -280,9 +279,8 @@ class TrelloBoardDAO(object):
         else:
             res = r.json()
 
-        if verbose:
-            logging.info('url: ', url)
-            logging.info(json.dumps(r.json(), sort_keys=True, indent=4))
+        logging.debug('url: ', url)
+        logging.debug(json.dumps(r.json(), sort_keys=True, indent=4))
         return res
 
     def copyCardToList(self, card, listid, prefix, verbose=None):
