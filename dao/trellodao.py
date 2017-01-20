@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 import requests
 import json
+import logging
 
 # A trello mapper
 
@@ -30,17 +31,15 @@ class TrelloBoardDAO(object):
                        self._token])
         r = requests.get(url)
 
-        if verbose:
-            print url
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+        logging.debug(url)
+        logging.debug(json.dumps(r.json(), sort_keys=True, indent=4))
 
         if r.status_code != 200:
-            print "GENERAL ERROR unable to fetch board lists:" + str(r.status_code) + r.text + u'\n'
+            logging.error("GENERAL ERROR unable to fetch board lists:" + str(r.status_code) + r.text)
             raise Exception("getLists:" + str(r.status_code))
         else:
             res = r.json()
 
-        # print json.dumps(lists, sort_keys=True,indent=4, separators=(',', ': '))
         return res
 
     def createList(self, listname, verbose=None):
@@ -57,12 +56,11 @@ class TrelloBoardDAO(object):
                        ])
         r = requests.post(url)
 
-        if verbose:
-            print url
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+        logging.debug(url)
+        logging.debug(json.dumps(r.json(), sort_keys=True, indent=4))
 
         if r.status_code != 200:
-            print "GENERAL ERROR createList:" + str(r.status_code) + r.text + u'\n'
+            logging.error("GENERAL ERROR createList:" + str(r.status_code) + r.text)
             raise Exception("createList:" + str(r.status_code))
         else:
             res = r.json()
@@ -80,12 +78,11 @@ class TrelloBoardDAO(object):
                        'true'])
         r = requests.put(url)
 
-        if verbose:
-            print url
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+        logging.debug(url)
+        logging.debug(json.dumps(r.json(), sort_keys=True, indent=4))
 
         if r.status_code != 200:
-            print "GENERAL ERROR unable to move card:" + str(r.status_code) + r.text + u'\n'
+            logging.error("GENERAL ERROR unable to move card:" + str(r.status_code) + r.text)
             raise Exception("closeList:" + str(r.status_code))
         else:
             res = r.json()
@@ -103,12 +100,11 @@ class TrelloBoardDAO(object):
                        'false'])
         r = requests.put(url)
 
-        if verbose:
-            print url
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+        logging.debug(url)
+        logging.debug(json.dumps(r.json(), sort_keys=True, indent=4))
 
         if r.status_code != 200:
-            print "GENERAL ERROR unable to move card:" + str(r.status_code) + r.text + u'\n'
+            logging.error("GENERAL ERROR unable to move card:" + str(r.status_code) + r.text)
             raise Exception("closeList:" + str(r.status_code))
         else:
             res = r.json()
@@ -121,7 +117,7 @@ class TrelloBoardDAO(object):
             if l[u'name'] == listname:
                 res = l[u'id']
         if not(res):
-            print "ERROR LIST NOT FOUND"
+            logging.info("ERROR LIST NOT FOUND")
         return res
 
     def moveCard(self, cardid, pos, verbose=None):
@@ -136,12 +132,11 @@ class TrelloBoardDAO(object):
                        pos])
         r = requests.put(url)
 
-        if verbose:
-            print url
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+        logging.debug(url)
+        logging.debug(json.dumps(r.json(), sort_keys=True, indent=4))
 
         if r.status_code != 200:
-            print "GENERAL ERROR unable to move card:" + str(r.status_code) + r.text + u'\n'
+            logging.error("GENERAL ERROR unable to move card:" + str(r.status_code) + r.text)
             raise Exception("moveCard:" + str(r.status_code))
         else:
             res = r.json()
@@ -166,14 +161,13 @@ class TrelloBoardDAO(object):
 
         r = requests.post(url)
         if r.status_code != 200:
-            print "GENERAL ERROR unable to create card:" + str(r.status_code) + r.text + u'\n'
+            logging.error("GENERAL ERROR unable to create card:" + str(r.status_code) + r.text)
             raise Exception("createCard:" + str(r.status_code))
         else:
             res = r.json()
 
-        if verbose:
-            print url
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+        logging.debug(url)
+        logging.debug(json.dumps(r.json(), sort_keys=True, indent=4))
         return res
 
     def deleteCard(self, cardid, verbose=None):
@@ -187,16 +181,13 @@ class TrelloBoardDAO(object):
         r = requests.delete(url)
 
         if r.status_code != 200:
-            print "GENERAL ERROR unable to delete card:" + str(r.status_code) + r.text + u'\n'
+            logging.error("GENERAL ERROR unable to delete card:" + str(r.status_code) + r.text + u'\n')
             raise Exception("deletecard:" + str(r.status_code))
         else:
             res = r.json()
-        if verbose:
-            print url
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+        logging.debug(url)
+        logging.debug(json.dumps(r.json(), sort_keys=True, indent=4))
         return res
-
-        pass
 
     # get open cards of a list
     def getOpenCards(self, listid, verbose=None):
@@ -210,7 +201,7 @@ class TrelloBoardDAO(object):
         r = requests.get(url)
 
         if r.status_code != 200:
-            print "GENERAL ERROR unable to get open card:" + str(r.status_code) + r.text + u'\n'
+            logging.error("GENERAL ERROR unable to get open card:" + str(r.status_code) + r.text)
             raise Exception("getopencards:" + str(r.status_code))
         else:
             res = r.json()
@@ -220,10 +211,8 @@ class TrelloBoardDAO(object):
             #     else:
             #         color = u'unknown'
             #     res[c[u'name']] = color
-        if verbose:
-            print url
-            print 'encoding: ', r.encoding
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+        logging.debug(url)
+        logging.debug(json.dumps(r.json(), sort_keys=True, indent=4))
         return res
 
     def getCard(self, cardid, verbose=None):
@@ -237,13 +226,13 @@ class TrelloBoardDAO(object):
         r = requests.get(url)
 
         if r.status_code != 200:
-            print "GENERAL ERROR unable to get card:" + str(r.status_code) + r.text + u'\n'
+            logging.error("GENERAL ERROR unable to get card:" + str(r.status_code) + r.text)
             raise Exception("getCard:" + str(r.status_code))
         else:
             res = r.json()
         if verbose:
-            print url
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+            logging.info(url)
+            logging.info(json.dumps(r.json(), sort_keys=True, indent=4))
         return res
 
     def setDueDate(self, card, duedate='null', verbose=None):
@@ -262,13 +251,13 @@ class TrelloBoardDAO(object):
             r = requests.put(url)
 
             if r.status_code != 200:
-                print "GENERAL ERROR unable to get card:" + str(r.status_code) + r.text + u'\n'
+                logging.error("GENERAL ERROR unable to get card:" + str(r.status_code) + r.text)
                 raise Exception("setDueDate:" + str(r.status_code))
             else:
                 res = r.json()
         if verbose:
-            print 'url: ', url
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+            logging.info('url: ', url)
+            logging.info(json.dumps(r.json(), sort_keys=True, indent=4))
         return res
 
     def setLabel(self, card, label='red', verbose=None):
@@ -286,14 +275,14 @@ class TrelloBoardDAO(object):
         r = requests.put(url)
 
         if r.status_code != 200:
-            print "GENERAL ERROR unable to get card:" + str(r.status_code) + r.text + u'\n'
+            logging.error("GENERAL ERROR unable to get card:" + str(r.status_code) + r.text)
             raise Exception("setLabel:" + str(r.status_code))
         else:
             res = r.json()
 
         if verbose:
-            print 'url: ', url
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+            logging.info('url: ', url)
+            logging.info(json.dumps(r.json(), sort_keys=True, indent=4))
         return res
 
     def copyCardToList(self, card, listid, prefix, verbose=None):
@@ -322,12 +311,12 @@ class TrelloBoardDAO(object):
         r = requests.post(url)
 
         if r.status_code != 200:
-            print "GENERAL ERROR unable to get card to copy:" + str(r.status_code) + r.text + u'\n'
+            logging.error("GENERAL ERROR unable to get card to copy:" + str(r.status_code) + r.text)
             raise Exception("copyCardToList:" + str(r.status_code))
 
         if verbose:
-            print url
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+            logging.info(url)
+            logging.info(json.dumps(r.json(), sort_keys=True, indent=4))
 
         newcard = r.json()
 
@@ -345,11 +334,11 @@ class TrelloBoardDAO(object):
         r = requests.put(url)
 
         if r.status_code != 200:
-            print "GENERAL ERROR unable to copy card:" + str(r.status_code) + r.text + u'\n'
+            logging.error("GENERAL ERROR unable to copy card:" + str(r.status_code) + r.text)
             raise Exception("copyCardToList:" + str(r.status_code))
         else:
             res = r.json()
         if verbose:
-            print url
-            print json.dumps(r.json(), sort_keys=True, indent=4)
+            logging.info(url)
+            logging.info(json.dumps(r.json(), sort_keys=True, indent=4))
         return res

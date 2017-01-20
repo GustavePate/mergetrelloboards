@@ -2,6 +2,18 @@
 from __future__ import unicode_literals
 from datetime import datetime
 from datetime import timedelta
+import logging
+
+
+class __:
+
+        def __init__(self, fmt, *args, **kwargs):
+            self.fmt = fmt
+            self.args = args
+            self.kwargs = kwargs
+
+        def __str__(self):
+            return self.fmt.format(*self.args, **self.kwargs)
 
 
 class TrelloUtils(object):
@@ -21,12 +33,12 @@ class TrelloUtils(object):
             duestr = c['due']
             if duestr is not None and duestr != 'null':
                 duedate = datetime.strptime(duestr, "%Y-%m-%dT%H:%M:%S.%fZ").date()
-                # print "due date: " + duestr
-                # print "due date: " + str(duedate)
+                # logging.info("due date: " + duestr
+                # logging.info("due date: " + str(duedate)
                 if duedate < near_futur:
                     # make it red
-                    # print "make it red"
-                    # print str(c)
+                    # logging.info("make it red"
+                    # logging.info(str(c)
                     self._dao.setLabel(c, 'red')
 
     def reorderListByPriority(self, listid, labels_order_by_priority_asc):
@@ -40,10 +52,10 @@ class TrelloUtils(object):
                 colorpresence = None
                 colorpresence = [label for label in colors if label['color'] == p]
                 if colorpresence != []:
-                    print "** ", sc['name'].encode('utf-8'), " has a label ", p
+                    logging.info("** ", sc['name'].encode('utf-8'), " has a label ", p)
                     if sc['id'] not in ignorelist:
                         self._dao.moveCard(sc['id'], 'top')
-                        print "** ", sc['name'].encode('utf-8'), " moved to top ", p
+                        logging.info("** ", sc['name'].encode('utf-8'), " moved to top ", p)
                         ignorelist.append(sc['id'])
 
     def reorderListByDueDate(self, listid):
@@ -52,9 +64,9 @@ class TrelloUtils(object):
         neworder = sorted(toreorder, key=lambda x: x['due'], reverse=True)
         for c in neworder:
             try:
-                print str(c)
-                print "** ", c['name'].encode('utf-8'), " has a due date ", c['due'].encode('utf-8')
+                logging.info(str(c))
+                logging.info("** ", c['name'].encode('utf-8'), " has a due date ", c['due'].encode('utf-8'))
                 self._dao.moveCard(c['id'], 'top')
-                print "** ", c['name'].encode('utf-8'), " moved to top "
+                logging.info("** ", c['name'].encode('utf-8'), " moved to top ")
             except Exception as e:
-                print str(e)
+                logging.info(str(e))

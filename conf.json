@@ -1,0 +1,63 @@
+/*
+    ########### GLOBAL CONFIGURATION ############
+
+    This conf should be valid json (except the comments blocks that will be tidied)
+
+
+    appkey and token (see trello api doc to get yours)
+    CHANGE THIS !!!!! (otherwise you will see my fantastic TodoList)
+*/
+
+{
+"appkey" : "64252214ed1b16224ee8742f8db14a6b",
+"secret" : "a2f1255f1bf434bc8a551308ddb26fdd5a2c1a4b520231156cb0ff55aef46fbc",
+"token" : "172df2e4d4004f66525c74a4902212992301b16508ab087fe6f681d14a457f0e",
+/*
+    ########### trello2txt CONFIGURATION ############
+
+    Board id (see Trello url)
+    CHANGE THIS !!!!!
+*/
+"board" : "GKibpt0N",
+
+/* Possible behaviour*/
+"BY_COLOR" : 0,
+"BY_NUMBER" : 1,
+/*
+    list here the name of  lists to be monitored and the desired sorting behaviour for each list
+    BY_COLOR: red items first, then orange then others
+    BY_DATE: by due date
+*/
+"toanalyse" : {
+    "Q1: Important / Urgent / En attente" : "BY_COLOR",
+    "Q2: Important / Pas urgent": "BY_COLOR",
+    "Calendrier": "BY_DATE"
+},
+
+/* IF you choose a "by date" behaviour, the number of cards to retrieve*/
+"BY_DATE_MAX_CARDS" : 10,
+/*
+    color prefix
+    List the card colors you want to display
+    the dic value is a prefix that will be added to the card text in the rendered list
+    set an empty dic to display all cards without prefix
+*/
+"COLOR_TO_DISPLAY" :  {
+    "red" : "!",
+    "orange" : ""
+},
+
+/* # ########### trellomerge CONFIGURATION ############ */
+
+"MERGE" : {
+    "masterboard" : "y79lF0eI",
+    "slaveboard" : "yh8jqfbd",
+    /*
+    # prefix to add to cards copied from the master board to the slave board
+    */
+    "slavecardsprefix" : "[copy]",
+    /*# theses slave lists will be sorted by due date and not by priority [default behaviour] */
+    "orderbyduedate" : ["Calendar"]
+}
+
+}

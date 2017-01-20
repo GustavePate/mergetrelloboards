@@ -7,10 +7,24 @@ import sys
 # from collections import OrderedDict
 import argparse
 import os
+from jsmin import jsmin
+import json
+from collections import OrderedDict
 from dao.trellodao import TrelloBoardDAO
 from objects.trelloutils import TrelloUtils
+from objects.trelloutils import __
+import ipdb as pdb
 
 conf = {}
+
+import logging
+
+logger = logging.getLogger()
+handler = logging.StreamHandler()
+formatter = logging.Formatter('{asctime}  {name} {levelname:5s} {message}', style='{')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
 
 
 def listexists(listname, lists):
@@ -33,9 +47,9 @@ def cardexists(card, cardlist, prefix):
 
 def main():
 
-    slavedao = TrelloBoardDAO(conf[u'appkey'], conf[u'token'], conf[u'slaveboard'])
-    masterdao = TrelloBoardDAO(conf[u'appkey'], conf[u'token'], conf[u'masterboard'])
-    prefix = u'[kr]'
+    slavedao = TrelloBoardDAO(conf['appkey'], conf['token'], conf['MERGE']['slaveboard'])
+    masterdao = TrelloBoardDAO(conf['appkey'], conf['token'], conf['MERGE']['masterboard'])
+    prefix = '[kr]'
 
     # get master lists
     masterlists = masterdao.getLists()
@@ -48,80 +62,82 @@ def main():
 
     # for each master list
     for ml in masterlists:
-        print u"\n---------------------------------------"
-        print u"compute master list:", ml[u'name'].encode('utf-8')
-        print u"---------------------------------------"
+
+        logger.info(ml)
+        logger.info("---------------------------------------")
+        logger.info(__("compute master list: {} ", ml['name']))
+        logger.info("---------------------------------------")
 
         # if list exists in slave ?
-        slavelist = listexists(ml[u'name'], slavelists)
+        slavelist = listexists(ml['name'], slavelists)
         if slavelist is not None:
-            print u"* ", ml[u'name'].encode('utf-8'), u" exists in slaveboard"
+            logger.info(__("* {} exists in slaveboard", ml['name']))
 
             # if it's not open
             if slavelist[u'closed']:
-                print "* ", ml[u'name'].encode('utf-8'), u" is closed in slaveboard"
+                logger.info(__("* {} is closed in slaveboard", ml['name']))
                 # open it
-                slavedao.openList(slavelist[u'id'])
-                print "* ", ml[u'name'].encode('utf-8'), u" is now open in slaveboard"
+                slavedao.openList(slavelist['id'])
+                logger.info(__("* {} is now open in slaveboard", ml['name']))
         else:
-            print u"* ", ml[u'name'].encode('utf-8'), u" does not exists in slaveboard"
+            logger.info(__("* {} does not exists in slaveboard", ml['name']))
             # else create it
             slavelist = slavedao.createList(ml[u'name'])
-            print u"* ", ml[u'name'].encode('utf-8'), u" is now created in slaveboard"
+            logger.info(__("* {} is now created in slaveboard", ml['name']))
 
         # for each open card in master list
         mastercards = masterdao.getOpenCards(ml[u'id'])
         slavecards = slavedao.getOpenCards(slavelist[u'id'])
         for mc in mastercards:
-            print u"compute master card:", mc[u'name'].encode('utf-8'), u"--"
+            logger.info(__("compute mastercard: {} --", mc['name']))
 
             # if not exists in slave
             sc = cardexists(mc, slavecards, prefix)
             if sc is None:
-                print u"** ", mc[u'name'].encode('utf-8'), u"does not exist in slave board"
+                logger.info(__("** {} does not exist in slaveboard", mc['name']))
 
                 # create it
                 sc = slavedao.copyCardToList(mc, slavelist[u'id'], prefix)
-                print u"** ", mc[u'name'].encode('utf-8'), u"is now created in slave board"
+                logger.info(__("** {} is now created in slaveboard", mc['name']))
             # if exists in slave
             else:
-                print u"** ", mc[u'name'].encode('utf-8'), u"exists in slave board"
+                logger.info(__("** {} exists in slaveboard", mc['name']))
                 # compare last modification date
                 # if master fresher than slave
-                if mc[u'dateLastActivity'] > sc[u'dateLastActivity']:
-                    print u"** ", mc[u'name'].encode('utf-8'), u"needs to be refresh from master"
+                if mc['dateLastActivity'] > sc['dateLastActivity']:
+                    logger.info(__("** {} needs to be refreshed from master", mc['name']))
 
                     # delete slave card
                     slavedao.deleteCard(sc['id'])
-                    print "** ", mc['name'].encode('utf-8'), "has been deleted"
+                    logger.info(__("** {} has been deleted", mc['name']))
                     # recreate it
                     sc = slavedao.copyCardToList(mc, slavelist['id'], prefix)
-                    print "** ", mc['name'].encode('utf-8'), "has been recreated"
+                    logger.info(__("** {} has been recreated", mc['name']))
 
             syncslavecards.append(sc['id'])
 
-    print "******** sync ok: ", str(syncslavecards)
+    logger.info(__("******** sync ok: {}", str(syncslavecards)))
 
     # For each slave list remove master synced close cards
     slavelists = slavedao.getLists()
     for sl in slavelists:
-        print "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-        print "compute slave list:", sl['name'].encode('utf-8')
-        print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        logger.info(__("compute slave list: {}", sl['name']))
+        logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         slavecards = slavedao.getOpenCards(sl['id'])
         for sc in slavecards:
             if sc['name'].startswith(prefix):
-                print "* created from master:", sc['name'].encode('utf-8')
+                logger.info(__("* created from master: {}", sc['name']))
                 if sc['id'] not in syncslavecards:
-                    print "* no longer exists in master:", sc['name'].encode('utf-8'), sc['id'].encode('utf-8')
+                    logger.info(__("* no longer exists in master: {} {}", sc['name'], sc['id']))
                     slavedao.deleteCard(sc['id'])
-                    print "* ", sc['name'].encode('utf-8'), "has been deleted"
+                    logger.info(__("* {} has been deleted", sc['name']))
 
         # reordrer cards
-        print "* reorder cards:", sl['name'].encode('utf-8')
+        logger.info(__("* reorder cards: {}", sl['name']))
         priority = ['green', 'yellow', 'orange', 'red']
         tu = TrelloUtils(slavedao)
-        if sl['name'] in conf['orderbyduedate']:
+        if sl['name'] in conf['MERGE']['orderbyduedate']:
             tu.reorderListByDueDate(sl['id'])
             tu.redSoonDueDate(sl['id'])
         else:
@@ -136,10 +152,16 @@ if __name__ == "__main__":
 
     if not os.path.exists(args.conf):
         shouldquit = True
-        print "configuration file  does not exist:" + args.conf.encode('utf-8')
+        logger.info("configuration file  does not exist:" + args.conf.encode('utf-8'))
 
     if shouldquit:
         sys.exit(1)
 
-    execfile(args.conf, conf)
+    with open(args.conf) as file:
+        rawconf = file.read()
+        tidyconf = jsmin(rawconf)
+        logger.debug(tidyconf)
+        conf = json.loads(tidyconf, object_pairs_hook=OrderedDict)
+        file.close()
+
     main()
