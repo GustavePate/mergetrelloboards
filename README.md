@@ -43,7 +43,7 @@ Use `crontab` to keep your Trello boards synchronized.
 
 Run
 
-    vim /path/to/mergetrelloboards/conf.py
+    vim /path/to/mergetrelloboards/conf.json
 
 Change the configuration. You will need:
 - a Trello API developer key [here](https://trello.com/docs/).
@@ -69,7 +69,7 @@ All I needed was a `trello2txt` tool. Here it is !
 
 Run
 
-    vim /path/to/mergetrelloboards/conf.py
+    vim /path/to/mergetrelloboards/conf.json
 
 Change the configuration; you will need:
 - a Trello API developer key [here](https://trello.com/docs/),
@@ -83,11 +83,11 @@ Adjust the filters to your needs (by default only cards with orange and red labe
 
 Just run:
 
-    python /path/to/mergetrelloboards/trello2txt.py /path/to/trello2txt/conf.py -s
+    python /path/to/mergetrelloboards/trello2txt.py /path/to/trello2txt/conf.json -s
 
 or to create a local file:
 
-    python /path/to/mergetrelloboards/trello2txt.py /path/to/trello2txt/conf.py -s -d /tmp/trello.txt
+    python /path/to/mergetrelloboards/trello2txt.py /path/to/trello2txt/conf.json -s -d /tmp/trello.txt
 
 Enjoy !
 
