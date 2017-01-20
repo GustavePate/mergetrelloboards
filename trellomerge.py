@@ -23,7 +23,7 @@ handler = logging.StreamHandler()
 formatter = logging.Formatter('{asctime}  {name} {levelname:5s} {message}', style='{')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 
 def listexists(listname, lists):

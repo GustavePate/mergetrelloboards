@@ -2,7 +2,6 @@
 
 # C extensions
 *.so
-
 # Packages
 *.egg
 *.egg-info
@@ -37,3 +36,4 @@ nosetests.xml
 
 # My conf
 myconf.py
+myconf.json
