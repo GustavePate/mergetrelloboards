@@ -60,8 +60,12 @@ class TrelloUtils(object):
 
     def reorderListByDueDate(self, listid):
         cards = self._dao.getOpenCards(listid)
-        toreorder = [sc for sc in cards if sc['due'] != 'null']
-        neworder = sorted(toreorder, key=lambda x: x['due'], reverse=True)
+        no_order = [sc for sc in cards if (sc['due'] == 'null' or not(sc['due']))]
+        logging.info("no_order: ", no_order)
+        toreorder = [sc for sc in cards if (sc['due'] != 'null' and sc['due'])]
+        logging.info("toreorder: ", toreorder)
+        neworder = sorted(toreorder, key=lambda x: x['due'], reverse=True) + no_order
+        logging.info("neworder: ", neworder)
         for c in neworder:
             try:
                 logging.info(__("** {} has a due date {}", c['name'],  c['due']))
