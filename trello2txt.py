@@ -50,7 +50,10 @@ class Card(object):
         return self._color
 
     def getduedate(self):
-        return self._duedate
+        if self._duedate:
+            return self._duedate
+        else:
+            return ""
 
     def gettext(self):
         return self._text
